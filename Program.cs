@@ -1,7 +1,7 @@
 ﻿/* 
-A user needs to be able to register an account
+A user needs to be able to register an account Done!
 A user needs to be able to log out.
-A user needs to be able to log in.
+A user needs to be able to log in. Done!
 
 A user needs to be able to upload information about the item they wish to trade.
 A user needs to be able to browse a list of other users items.
@@ -24,7 +24,7 @@ users.Add(new User("Lina", "tjokatt2000"));
 User? active_user = null; //? = nullable, kna finnas en inloggad user eller en inte inloggad user
 
 bool running = true;
-while (running)
+while (running) //all kod är inuti en while loop så de körs tills jag vill avsluta programmet running=false;
 {
     if (active_user == null)
     {
@@ -41,7 +41,7 @@ while (running)
         switch (registerOrLogin)
         {
             case "1":
-                Console.Clear();
+                try { Console.Clear(); } catch { } //workaround to allow debugging
                 Console.WriteLine("Enter username:");
                 string username = Console.ReadLine();
 
@@ -72,17 +72,55 @@ while (running)
 
                 users.Add(new User(newUsername, newPassword));
                 Console.Clear();
-                Console.WriteLine("Account succesfully registerd, press ENTER to go back to login");
+                Console.WriteLine("Account succesfully registerd, press ENTER to go back to log-in page");
                 Console.ReadLine();
 
                 break;
         }
     }
-    else
+    else //i denna else skrivs all funktionalitet när man är inloggad då active_user != null;
     {
         Console.Clear();
-        Console.WriteLine("TradeHub main menu");
-        Console.ReadLine();
+        Console.WriteLine("TradeHub main menu, choose any of the options");
+        Console.WriteLine("Please chose one of the options below");
+        Console.WriteLine("1. Upload an item");
+        Console.WriteLine("2: Brows existing items of other users");
+        Console.WriteLine("3: Request a trade for someone's item");
+        Console.WriteLine("4: Accept a trade request");
+        Console.WriteLine("5: Deny a trade request");
+        Console.WriteLine("6: Brows on already completed requests");
+        Console.WriteLine("7: Logout");
+
+        string input = Console.ReadLine();
+        switch (input)
+        {
+            case "1":
+                break;
+            case "2":
+                break;
+            case "3":
+                break;
+            case "4":
+                break;
+            case "5":
+                break;
+            case "6":
+                break;
+            case "7":
+                Console.WriteLine("1: If you're sure you want to logout");
+                Console.WriteLine("2: If you want to go back to main menu");
+                string logout = Console.ReadLine();
+                switch (logout)
+                {
+                    case "1":
+                        active_user = null;
+                        break;
+                    case "2":
+                        break;
+                }
+
+                break;
+        }
     }
 
 }
