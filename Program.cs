@@ -15,9 +15,24 @@ using App;
 //gör en lista med User som heter users
 List<User> users = new List<User>();
 
-
 //adderar Users så att jag kan kolla att min kod fungerar
 users.Add(new User("Lina", "tjokatt2000"));
+users.Add(new User("David", "tjokatt2000"));
+
+User lina = users[0];
+User david = users[1];
+
+lina.AddItem("Airpods PRO", "Helt nya", lina);
+lina.AddItem("Monstrea", "50 cm", lina);
+lina.AddItem("Läsglasögon", "Måttligt använda", lina);
+
+david.AddItem("Nike keps", "Grön och skön", david);
+david.AddItem("Lenovo dator", "Årsmodell 2018", david);
+david.AddItem("En ryggsäck", "Väldigt rymlig", david);
+
+
+
+
 
 
 
