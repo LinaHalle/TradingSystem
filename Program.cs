@@ -1,6 +1,6 @@
 ﻿/* 
 A user needs to be able to register an account Done!
-A user needs to be able to log out.
+A user needs to be able to log out. Done!
 A user needs to be able to log in. Done!
 
 A user needs to be able to upload information about the item they wish to trade.
@@ -14,11 +14,12 @@ A user needs to be able to browse completed requests.*/
 using App;
 //gör en lista med User som heter users
 List<User> users = new List<User>();
-//gör en lista med Item som heter items
-List<Item> items = new List<Item>();
+
 
 //adderar Users så att jag kan kolla att min kod fungerar
 users.Add(new User("Lina", "tjokatt2000"));
+
+
 
 
 User? active_user = null; //? = nullable, kna finnas en inloggad user eller en inte inloggad user
@@ -28,6 +29,7 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
 {
     if (active_user == null)
     {
+        Console.Clear();
         Console.WriteLine("Welcome to TradeHub");
         Console.WriteLine("------------- Log-in page -------------");
         Console.WriteLine();
@@ -70,7 +72,7 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                 Console.WriteLine("Enter your new password");
                 string newPassword = Console.ReadLine();
 
-                users.Add(new User(newUsername, newPassword));
+                users.Add(new User(newUsername, newPassword)); //måste sparas sen när vi går igenom filer
                 Console.Clear();
                 Console.WriteLine("Account succesfully registerd, press ENTER to go back to log-in page");
                 Console.ReadLine();
@@ -95,7 +97,19 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
         switch (input)
         {
             case "1":
+                // här får vi inputs från konsolen som sedan skapar ett item och läggs till i active_user listan. 
+                Console.Clear();
+                Console.WriteLine("Enter the name of the item");
+                string name = Console.ReadLine();
+                Console.WriteLine("Enter a description of the item");
+                string description = Console.ReadLine();
+                User owner = active_user;
+                active_user.AddItem(name, description, owner);
+                Console.WriteLine("The item was succesfylly added to your list"); //behöver kunna sparas när vi lärt oss filsystem
+                Console.WriteLine("Press ENTER to go back to menu");
+                Console.ReadLine();
                 break;
+
             case "2":
                 break;
             case "3":
