@@ -33,10 +33,6 @@ david.AddItem("En ryggsäck", "Väldigt rymlig", david);
 
 
 
-
-
-
-
 User? active_user = null; //? = nullable, kna finnas en inloggad user eller en inte inloggad user
 
 bool running = true;
@@ -126,7 +122,20 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                 break;
 
             case "2":
+                Console.Clear();
+                Console.WriteLine("Here's all the items from other users");
+                foreach (User user in users)
+                {
+                    foreach (Item item in user.Items)
+                    {
+                        if (user.Items != active_user.Items) Console.WriteLine(item.Name + ": " + item.Description);
+                    }
+
+                }
+                Console.WriteLine("Press ENTER to continue");
+                Console.ReadLine();
                 break;
+
             case "3":
                 break;
             case "4":
