@@ -8,13 +8,17 @@ enum TradeStatus
 }
 class Trade
 {
-    public string Sender;
-    public string Reciever;
+    public User Sender;
+    public Item RequestedItem;
+    public Item OfferedItem;
+    public User Reciever;
     public TradeStatus Status;
 
-    public Trade(string sender, string reciever, TradeStatus status)
+    public Trade(User sender, Item requestedItem, Item offeredItem, User reciever, TradeStatus status)
     {
         Sender = sender;
+        RequestedItem = requestedItem;
+        OfferedItem = offeredItem;
         Reciever = reciever;
         Status = status;
     }
