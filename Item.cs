@@ -14,5 +14,10 @@ class Item
         Owner = owner;
     }
 
+    public string ShowItem()
+    {
+        return "Item:" + Name + "\nDescription:" + Description;
+    }
+
 
 }
