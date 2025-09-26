@@ -129,7 +129,10 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                 {
                     foreach (Item item in user.Items)
                     {
-                        if (user.Items != active_user.Items) Console.WriteLine(item.ShowItem());
+                        if (user.Items != active_user.Items)     //ett sätt att skriva ut item i konsolen, sämre sätt
+                        {
+                            Console.WriteLine(item.ShowItem());
+                        }
                     }
 
                 }
@@ -139,36 +142,48 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
 
             case "3":
                 Console.Clear();
-                Console.WriteLine("Choose the index of the item you want");
-                int i = 1;
+                List<Item> OtherUsersItems = new List<Item>();
                 foreach (User user in users)
                 {
-                    if (user != active_user)
+                    if (user != active_user)                    //Ett annat sätt att skriva ut de plus ett litet index
                     {
                         foreach (Item item in user.Items)
                         {
-                            Console.WriteLine($"{i}.{item.ShowItem()}");
-                            i++;
+                            OtherUsersItems.Add(item);          //fyller en ny lista med bara andras items 
                         }
                     }
-
-
                 }
-                string wantedItem = Console.ReadLine();
-                // Item RequestedItem = null;
-                // foreach (User user in users)
-                // {
-                //     foreach (Item item in user.Items)
-                //     {
-                //         if (wantedItem == item.Name)
-                //         {
 
-                //         }
-                //     }
-                // }
+                int i = 1;
+                Console.WriteLine("Enter the number of the item you want");
+                foreach (Item item in OtherUsersItems)
+                {
+                    Console.WriteLine($"{i}.{item.ShowItem()}");    //skriver ut den nya listan med ett index som börjar på 1 i konsolen
+                    i++;
+                }
 
+                int chosenIndex = int.Parse(Console.ReadLine()) - 1;  //chosenindex är användarens valda index som görs om från string till int
+                Item requestedItem = OtherUsersItems[chosenIndex];  //här kopplar vi requestedItem till de valda itemet
+                User reciever = requestedItem.Owner; // kopplar reciever 
 
+                Console.WriteLine("Enter the number of your item you want to offer as trade");
+                i = 1;
+                foreach (Item item in active_user.Items)
+                {
+                    Console.WriteLine($"{i}.{item.ShowItem()}");
+                    i++;
+                }
+                int myItem = int.Parse(Console.ReadLine()) - 1;
+                Item offeredItem = active_user.Items[myItem];  //ger offereditem sitt item
+                                                               // User Sender = OfferedItem.Owner; //onödigt för sender är alltid active_user User Sender = active_user
+
+                Trade trade = new Trade(active_user, requestedItem, offeredItem, reciever, TradeStatus.Pending); //skapar ett Trade objekt
+
+                Console.WriteLine($"Your trade request has succesfully been sent to: {reciever.Username}");
+                Console.WriteLine("Press ENTER to go back to main menu");
+                Console.ReadLine();
                 break;
+
             case "4":
                 break;
             case "5":
