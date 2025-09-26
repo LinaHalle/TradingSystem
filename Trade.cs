@@ -4,7 +4,7 @@ enum TradeStatus
 {
     Pending,
     Denied,
-    Accepted
+    Accepted,
 }
 class Trade
 {

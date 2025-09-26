@@ -11,6 +11,7 @@ A user needs to be able to accept a trade request.
 A user needs to be able to deny a trade request.
 A user needs to be able to browse completed requests.*/
 
+using System.Reflection.Metadata.Ecma335;
 using App;
 //gör en lista med User som heter users
 List<User> users = new List<User>();
@@ -99,10 +100,9 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
         Console.WriteLine("1. Upload an item");
         Console.WriteLine("2: Brows existing items of other users");
         Console.WriteLine("3: Request a trade for someone's item");
-        Console.WriteLine("4: Accept a trade request");
-        Console.WriteLine("5: Deny a trade request");
-        Console.WriteLine("6: Brows on already completed requests");
-        Console.WriteLine("7: Logout");
+        Console.WriteLine("4: Accept/Deny a trade request");
+        Console.WriteLine("5: Brows on already completed requests");
+        Console.WriteLine("6: Logout");
 
         string input = Console.ReadLine();
         switch (input)
@@ -178,6 +178,7 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                                                                // User Sender = OfferedItem.Owner; //onödigt för sender är alltid active_user User Sender = active_user
 
                 Trade trade = new Trade(active_user, requestedItem, offeredItem, reciever, TradeStatus.Pending); //skapar ett Trade objekt
+                reciever.AddPendingTrade(trade); //skickar till recieverns trade lista
 
                 Console.WriteLine($"Your trade request has succesfully been sent to: {reciever.Username}");
                 Console.WriteLine("Press ENTER to go back to main menu");
@@ -185,12 +186,79 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                 break;
 
             case "4":
+                Console.Clear();
+                Console.WriteLine("Choose the Trade you want to Accept/Deny");
+                i = 1;
+                if (active_user.pendingTrades.Count > 0)//om listan inte är tom
+                {
+                    foreach (Trade myTrades in active_user.pendingTrades)
+                    {
+                        Console.WriteLine($"{i}. {myTrades.Sender.Username} wants your {myTrades.RequestedItem.Name} in exchange for {myTrades.OfferedItem.Name}");
+                        i++;
+                    }
+                    int chosenTrade = int.Parse(Console.ReadLine()) - 1;
+                    Trade selectedTrade = active_user.pendingTrades[chosenTrade];
+
+                    Console.WriteLine("Choose an option");
+                    Console.WriteLine("1. Accept");
+                    Console.WriteLine("2. Deny");
+
+                    string acceptOrDeny = Console.ReadLine();
+                    switch (acceptOrDeny)
+                    {
+                        case "1":
+                            Console.Clear();
+                            selectedTrade.RequestedItem.Owner = selectedTrade.Sender; //ändrar ägare av requested item 
+
+                            selectedTrade.OfferedItem.Owner = active_user; //ändrar ägare av offered
+
+                            selectedTrade.Status = TradeStatus.Accepted; //ändrar status till accepted
+
+
+                            active_user.pendingTrades.Remove(selectedTrade); //tar bort från pending-listan 
+
+                            active_user.completedTrades.Add(selectedTrade);
+
+                            Console.WriteLine("Trade accepted");
+                            Console.WriteLine("Press ENTER to go back to menu");
+                            Console.ReadLine();
+                            break;
+
+                        case "2":
+                            Console.Clear();
+                            selectedTrade.Status = TradeStatus.Denied;
+                            active_user.pendingTrades.Remove(selectedTrade);
+
+                            active_user.completedTrades.Add(selectedTrade);
+
+                            Console.WriteLine("Trade denied");
+                            Console.WriteLine("Press ENTER to go back to menu");
+                            Console.ReadLine();
+                            break;
+
+                    }
+
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("You have no pending requests");
+                    Console.WriteLine("Press ENTER to go back");
+                    Console.ReadLine();
+
+                }
                 break;
+
             case "5":
+                Console.WriteLine("Here's a list of your already completed trades");
+                foreach (Trade doneTrades in active_user.completedTrades)
+                {
+                    Console.WriteLine($"you {doneTrades.Status} {doneTrades.Sender.Username}'s {doneTrades.RequestedItem.Name} in exxhange for {doneTrades.OfferedItem.Name}");
+                }
+                Console.WriteLine("Press enter to go back to menu");
+                Console.ReadLine();
                 break;
             case "6":
-                break;
-            case "7":
                 Console.WriteLine("1: If you're sure you want to logout");
                 Console.WriteLine("2: If you want to go back to main menu");
                 string logout = Console.ReadLine();
@@ -204,7 +272,8 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                 }
 
                 break;
-        }
+
+        }       // Console.WriteLine($"{i}. {myTrades.Sender.Username} wants your {myTrades.RequestedItem.Name} in exchange for {myTrades.OfferedItem.Name}");
     }
 
 }

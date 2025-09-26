@@ -6,11 +6,17 @@ class User
     string _password;
     public List<Item> Items = new List<Item>();
 
+    public List<Trade> pendingTrades = new List<Trade>();
+
+    public List<Trade> completedTrades = new List<Trade>();
+
     public User(string username, string password)
     {
         Username = username;
         _password = password;
         Items = new List<Item>();
+        pendingTrades = new List<Trade>();
+        completedTrades = new List<Trade>();
     }
 
     public bool TryLogin(string username, string password)
@@ -25,4 +31,16 @@ class User
 
         Items.Add(item);
     }
+
+    public void AddPendingTrade(Trade trade)
+    {
+        pendingTrades.Add(trade);
+    }
+
+    public void AddcompletedTrades(Trade trade)
+    {
+        completedTrades.Add(trade);
+    }
+
+
 }
