@@ -16,7 +16,7 @@ class Item
 
     public string ShowItem()
     {
-        return "Item:" + Name + "\nDescription:" + Description;
+        return Name + ", " + Description + ", (" + Owner.Username + ")" + "\n";
     }
 
 

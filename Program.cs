@@ -122,7 +122,7 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                 break;
 
             case "2":
-                // här loppar vi egeenom alla users och sen i sin tur deras items, de skrivs bara ut i konsolen om de inte är den activa_userns item. 
+                // här loppar vi egenom alla users och sen i sin tur deras items, de skrivs bara ut i konsolen om de inte är den activa_userns item. 
                 Console.Clear();
                 Console.WriteLine("Here's all the items from other users");
                 foreach (User user in users)
@@ -138,6 +138,35 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                 break;
 
             case "3":
+                Console.Clear();
+                Console.WriteLine("Choose the index of the item you want");
+                int i = 1;
+                foreach (User user in users)
+                {
+                    if (user != active_user)
+                    {
+                        foreach (Item item in user.Items)
+                        {
+                            Console.WriteLine($"{i}.{item.ShowItem()}");
+                            i++;
+                        }
+                    }
+
+
+                }
+                string wantedItem = Console.ReadLine();
+                // Item RequestedItem = null;
+                // foreach (User user in users)
+                // {
+                //     foreach (Item item in user.Items)
+                //     {
+                //         if (wantedItem == item.Name)
+                //         {
+
+                //         }
+                //     }
+                // }
+
 
                 break;
             case "4":
