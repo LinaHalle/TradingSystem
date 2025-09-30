@@ -11,7 +11,8 @@ A user needs to be able to accept a trade request.
 A user needs to be able to deny a trade request.
 A user needs to be able to browse completed requests.*/
 
-using System.Reflection.Metadata.Ecma335;
+//This is the code where the user interfare with program through the console.
+
 using App;
 //gör en lista med User som heter users
 List<User> users = new List<User>();
@@ -20,9 +21,11 @@ List<User> users = new List<User>();
 users.Add(new User("Lina", "tjokatt2000"));
 users.Add(new User("David", "tjokatt2000"));
 
+//I assign the users to a name just to make it easier to call methods on them without writing users[0]/ users[1] everytime, but its not needed for the code to compile.
 User lina = users[0];
 User david = users[1];
 
+//I add som items to the users
 lina.AddItem("Airpods PRO", "Helt nya", lina);
 lina.AddItem("Monstrea", "50 cm", lina);
 lina.AddItem("Läsglasögon", "Måttligt använda", lina);
@@ -34,14 +37,14 @@ david.AddItem("En ryggsäck", "Väldigt rymlig", david);
 
 
 
-User? active_user = null; //? = nullable, kna finnas en inloggad user eller en inte inloggad user
+User? active_user = null; //? = nullable, there can be an logged in user or a not logged in user. With this I keep track of the currently logged-in user.
 
 bool running = true;
-while (running) //all kod är inuti en while loop så de körs tills jag vill avsluta programmet running=false;
+while (running) //The program runs inside a while loop until I explicitly decide to stop it running=false;
 {
-    if (active_user == null)
+    if (active_user == null) //when no one is logged in the user sees the login/register menu
     {
-        Console.Clear();
+        try { Console.Clear(); } catch { }
         Console.WriteLine("Welcome to TradeHub");
         Console.WriteLine("------------- Log-in page -------------");
         Console.WriteLine();
@@ -51,7 +54,7 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
         Console.WriteLine("---------------------------------------");
 
         string registerOrLogin = Console.ReadLine();
-
+        //If active_user has an account and it checks out with TryLogin the active_user is not null anymore and moves out from the login menu and moves to the else where the rest of the code is  
         switch (registerOrLogin)
         {
             case "1":
@@ -59,12 +62,13 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                 Console.WriteLine("Enter username:");
                 string username = Console.ReadLine();
 
-                Console.Clear();
+                try { Console.Clear(); } catch { }
                 Console.WriteLine("Enter password");
                 string password = Console.ReadLine();
 
-                Console.Clear();
+                try { Console.Clear(); } catch { }
 
+                //I use a foreach loop to go through the saved users and see if anything match the inputs, if it get a match the loop breaks and move on otherwise goes back to login
                 foreach (User user in users)
                 {
                     if (user.TryLogin(username, password))
@@ -72,29 +76,36 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                         active_user = user;
                         break;
                     }
+                    // else
+                    // {
+                    //     Console.WriteLine("No matching user, try again or create an account, press ENTER to go back");
+                    //     Console.ReadLine();
+                    //     break;
+                    // }
                 }
                 break;
 
             case "2":
-                Console.Clear();
+                //here the new user is created and then relocated to the log in menu again bc active_user is still null.
+                try { Console.Clear(); } catch { }
                 Console.WriteLine("Enter your new username");
                 string newUsername = Console.ReadLine();
 
-                Console.Clear();
+                try { Console.Clear(); } catch { }
                 Console.WriteLine("Enter your new password");
                 string newPassword = Console.ReadLine();
 
                 users.Add(new User(newUsername, newPassword)); //måste sparas sen när vi går igenom filer
-                Console.Clear();
+                try { Console.Clear(); } catch { }
                 Console.WriteLine("Account succesfully registerd, press ENTER to go back to log-in page");
                 Console.ReadLine();
 
                 break;
         }
     }
-    else //i denna else skrivs all funktionalitet när man är inloggad då active_user != null;
+    else //here's all functionality when active_user != null;
     {
-        Console.Clear();
+        try { Console.Clear(); } catch { }
         Console.WriteLine("TradeHub main menu, choose any of the options");
         Console.WriteLine("Please chose one of the options below");
         Console.WriteLine("1. Upload an item");
@@ -108,8 +119,8 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
         switch (input)
         {
             case "1":
-                // här får vi inputs från konsolen som sedan skapar ett item och läggs till i active_user listan. 
-                Console.Clear();
+                // here we get inputs from the user in the console, that creates an item that is added in the active_users item-list.  
+                try { Console.Clear(); } catch { }
                 Console.WriteLine("Enter the name of the item");
                 string name = Console.ReadLine();
                 Console.WriteLine("Enter a description of the item");
@@ -122,63 +133,63 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                 break;
 
             case "2":
-                // här loppar vi egenom alla users och sen i sin tur deras items, de skrivs bara ut i konsolen om de inte är den activa_userns item. 
-                Console.Clear();
+                // Here I use a foreach loop to go through all users, all users that are != active_user a do another foreach loop to go thorugh their items and write it out in the console through my method ShowItem.  
+                try { Console.Clear(); } catch { }
                 Console.WriteLine("Here's all the items from other users");
+
                 foreach (User user in users)
                 {
-                    foreach (Item item in user.Items)
+                    if (user != active_user)
                     {
-                        if (user.Items != active_user.Items)     //ett sätt att skriva ut item i konsolen, sämre sätt
+                        foreach (Item item in user.Items)
                         {
                             Console.WriteLine(item.ShowItem());
                         }
                     }
-
                 }
                 Console.WriteLine("Press ENTER to continue");
                 Console.ReadLine();
                 break;
 
             case "3":
-                Console.Clear();
-                List<Item> OtherUsersItems = new List<Item>();
+                try { Console.Clear(); } catch { }
+                List<Item> OtherUsersItems = new List<Item>();  //here I create a new list for only other users items
                 foreach (User user in users)
                 {
-                    if (user != active_user)                    //Ett annat sätt att skriva ut de plus ett litet index
+                    if (user != active_user)
                     {
                         foreach (Item item in user.Items)
                         {
-                            OtherUsersItems.Add(item);          //fyller en ny lista med bara andras items 
+                            OtherUsersItems.Add(item);          //here I fill the new list 
                         }
                     }
                 }
 
-                int i = 1;
+                int i = 1; //I want the index to start on 1, its unnatural for a user to see a list from 0.
                 Console.WriteLine("Enter the number of the item you want");
                 foreach (Item item in OtherUsersItems)
                 {
-                    Console.WriteLine($"{i}.{item.ShowItem()}");    //skriver ut den nya listan med ett index som börjar på 1 i konsolen
+                    Console.WriteLine($"{i}.{item.ShowItem()}");    //writes out the new list with an index
                     i++;
                 }
 
-                int chosenIndex = int.Parse(Console.ReadLine()) - 1;  //chosenindex är användarens valda index som görs om från string till int
-                Item requestedItem = OtherUsersItems[chosenIndex];  //här kopplar vi requestedItem till de valda itemet
-                User reciever = requestedItem.Owner; // kopplar reciever 
+                int chosenIndex = int.Parse(Console.ReadLine()) - 1;  //convert the string input to an int chosenIndex and take -1 to match the real index number that always starts on 0.
+                Item requestedItem = OtherUsersItems[chosenIndex];  //Here I give requestedItem the value of the choosen item.
+                User reciever = requestedItem.Owner; // I connect the Reciever field to the owner of the requested item.
 
                 Console.WriteLine("Enter the number of your item you want to offer as trade");
                 i = 1;
                 foreach (Item item in active_user.Items)
                 {
-                    Console.WriteLine($"{i}.{item.ShowItem()}");
+                    Console.WriteLine($"{i}.{item.ShowItem()}"); //Loops through the active_users items and shows the items with an index 
                     i++;
                 }
-                int myItem = int.Parse(Console.ReadLine()) - 1;
-                Item offeredItem = active_user.Items[myItem];  //ger offereditem sitt item
+                int myItem = int.Parse(Console.ReadLine()) - 1; //convert the string input to an int myItem and take -1 to match the real index number that always starts on 0.
+                Item offeredItem = active_user.Items[myItem];  //OfferedItem gets its value  
                                                                // User Sender = OfferedItem.Owner; //onödigt för sender är alltid active_user User Sender = active_user
 
-                Trade trade = new Trade(active_user, requestedItem, offeredItem, reciever, TradeStatus.Pending); //skapar ett Trade objekt
-                reciever.AddPendingTrade(trade); //skickar till recieverns trade lista
+                Trade trade = new Trade(active_user, requestedItem, offeredItem, reciever, TradeStatus.Pending); //Creates a Trade object 
+                reciever.AddPendingTrade(trade); //The new trade is added to the recievers pendingtrade - list 
 
                 Console.WriteLine($"Your trade request has succesfully been sent to: {reciever.Username}");
                 Console.WriteLine("Press ENTER to go back to main menu");
@@ -186,18 +197,18 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                 break;
 
             case "4":
-                Console.Clear();
+                try { Console.Clear(); } catch { }
                 Console.WriteLine("Choose the Trade you want to Accept/Deny");
-                i = 1;
-                if (active_user.pendingTrades.Count > 0)//om listan inte är tom
+                i = 1; //want the list to start at 1
+                if (active_user.pendingTrades.Count > 0)//If the list isn't empty
                 {
-                    foreach (Trade myTrades in active_user.pendingTrades)
+                    foreach (Trade myTrades in active_user.pendingTrades) //loops though the active_users pending trades
                     {
-                        Console.WriteLine($"{i}. {myTrades.Sender.Username} wants your {myTrades.RequestedItem.Name} in exchange for {myTrades.OfferedItem.Name}");
+                        Console.WriteLine($"{i}. {myTrades.Sender.Username} wants your {myTrades.RequestedItem.Name} in exchange for {myTrades.OfferedItem.Name}");  //displays the trades with an index
                         i++;
                     }
-                    int chosenTrade = int.Parse(Console.ReadLine()) - 1;
-                    Trade selectedTrade = active_user.pendingTrades[chosenTrade];
+                    int chosenTrade = int.Parse(Console.ReadLine()) - 1; //the active_user chooses a index and here it's converted from a string to an int and is reduced -1. 
+                    Trade selectedTrade = active_user.pendingTrades[chosenTrade]; //I create a new variabel for the choosen trade
 
                     Console.WriteLine("Choose an option");
                     Console.WriteLine("1. Accept");
@@ -207,17 +218,17 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                     switch (acceptOrDeny)
                     {
                         case "1":
-                            Console.Clear();
-                            selectedTrade.RequestedItem.Owner = selectedTrade.Sender; //ändrar ägare av requested item 
+                            try { Console.Clear(); } catch { }
+                            selectedTrade.RequestedItem.Owner = selectedTrade.Sender; //I change the owner to the sender
 
-                            selectedTrade.OfferedItem.Owner = active_user; //ändrar ägare av offered
+                            selectedTrade.OfferedItem.Owner = active_user; //I change the owner to the reciever(active_user)
 
-                            selectedTrade.Status = TradeStatus.Accepted; //ändrar status till accepted
+                            selectedTrade.Status = TradeStatus.Accepted; //I change status to accepted.
 
 
-                            active_user.pendingTrades.Remove(selectedTrade); //tar bort från pending-listan 
+                            active_user.pendingTrades.Remove(selectedTrade); //I take the trade away from pending 
 
-                            active_user.completedTrades.Add(selectedTrade);
+                            active_user.completedTrades.Add(selectedTrade); // I add it to the completed trades list
 
                             Console.WriteLine("Trade accepted");
                             Console.WriteLine("Press ENTER to go back to menu");
@@ -225,8 +236,8 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                             break;
 
                         case "2":
-                            Console.Clear();
-                            selectedTrade.Status = TradeStatus.Denied;
+                            try { Console.Clear(); } catch { }
+                            selectedTrade.Status = TradeStatus.Denied; //when denied I only change status to denied, and take away from pending list to completed list
                             active_user.pendingTrades.Remove(selectedTrade);
 
                             active_user.completedTrades.Add(selectedTrade);
@@ -241,7 +252,7 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
                 }
                 else
                 {
-                    Console.Clear();
+                    try { Console.Clear(); } catch { }
                     Console.WriteLine("You have no pending requests");
                     Console.WriteLine("Press ENTER to go back");
                     Console.ReadLine();
@@ -251,13 +262,24 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
 
             case "5":
                 Console.WriteLine("Here's a list of your already completed trades");
-                foreach (Trade doneTrades in active_user.completedTrades)
+                if (active_user.completedTrades.Count > 0)
                 {
-                    Console.WriteLine($"you {doneTrades.Status} {doneTrades.Sender.Username}'s {doneTrades.RequestedItem.Name} in exxhange for {doneTrades.OfferedItem.Name}");
+                    foreach (Trade doneTrades in active_user.completedTrades)
+                    {
+                        Console.WriteLine($"you {doneTrades.Status} {doneTrades.Sender.Username}'s {doneTrades.RequestedItem.Name} in exxhange for {doneTrades.OfferedItem.Name}");
+                    }
+                    Console.WriteLine("Press enter to go back to menu");
+                    Console.ReadLine();
                 }
-                Console.WriteLine("Press enter to go back to menu");
-                Console.ReadLine();
+                else
+                {
+                    try { Console.Clear(); } catch { }
+                    Console.WriteLine("You have no completed trades");
+                    Console.WriteLine("Press enter to go back to menu");
+                    Console.ReadLine();
+                }
                 break;
+
             case "6":
                 Console.WriteLine("1: If you're sure you want to logout");
                 Console.WriteLine("2: If you want to go back to main menu");
@@ -273,7 +295,7 @@ while (running) //all kod är inuti en while loop så de körs tills jag vill av
 
                 break;
 
-        }       // Console.WriteLine($"{i}. {myTrades.Sender.Username} wants your {myTrades.RequestedItem.Name} in exchange for {myTrades.OfferedItem.Name}");
+        }
     }
 
 }
