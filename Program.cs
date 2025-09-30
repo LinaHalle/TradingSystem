@@ -240,7 +240,9 @@ while (running) //The program runs inside a while loop until I explicitly decide
 
                             active_user.pendingTrades.Remove(selectedTrade); //I take the trade away from pending 
 
-                            active_user.completedTrades.Add(selectedTrade); // I add it to the completed trades list
+                            // I add it to the completed trades list for both users
+                            active_user.completedTrades.Add(selectedTrade);
+                            selectedTrade.Sender.completedTrades.Add(selectedTrade);
 
                             Console.WriteLine("Trade accepted");
                             Console.WriteLine("Press ENTER to go back to menu");
@@ -252,7 +254,9 @@ while (running) //The program runs inside a while loop until I explicitly decide
                             selectedTrade.Status = TradeStatus.Denied; //when denied I only change status to denied, and take away from pending list to completed list
                             active_user.pendingTrades.Remove(selectedTrade);
 
+                            // I add it to the completed trades list for both users
                             active_user.completedTrades.Add(selectedTrade);
+                            selectedTrade.Sender.completedTrades.Add(selectedTrade);
 
                             Console.WriteLine("Trade denied");
                             Console.WriteLine("Press ENTER to go back to menu");
@@ -273,23 +277,30 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 break;
 
             case "5":
-                Console.WriteLine("Here's a list of your already completed trades");
+                try { Console.Clear(); } catch { }
                 if (active_user.completedTrades.Count > 0)
                 {
+                    Console.WriteLine("Here's a list of your already completed trades");
                     foreach (Trade doneTrades in active_user.completedTrades)
                     {
-                        Console.WriteLine($"you {doneTrades.Status} {doneTrades.Sender.Username}'s {doneTrades.RequestedItem.Name} in exxhange for {doneTrades.OfferedItem.Name}");
+                        if (doneTrades.Sender == active_user)
+                        {
+                            Console.WriteLine($"You offered your {doneTrades.OfferedItem.Name} to {doneTrades.Reciever.Username} in exchange for {doneTrades.RequestedItem.Name}. Status: {doneTrades.Status}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{doneTrades.Sender.Username} offered your their {doneTrades.OfferedItem.Name} in exchange for your {doneTrades.RequestedItem.Name}. You {doneTrades.Status} this trade.");
+                        }
                     }
-                    Console.WriteLine("Press enter to go back to menu");
-                    Console.ReadLine();
                 }
                 else
                 {
                     try { Console.Clear(); } catch { }
                     Console.WriteLine("You have no completed trades");
-                    Console.WriteLine("Press enter to go back to menu");
-                    Console.ReadLine();
+
                 }
+                Console.WriteLine("Press enter to go back to menu");
+                Console.ReadLine();
                 break;
 
             case "6":
