@@ -223,6 +223,18 @@ while (running) //The program runs inside a while loop until I explicitly decide
 
                             selectedTrade.OfferedItem.Owner = active_user; //I change the owner to the reciever(active_user)
 
+                            //takes away Requested item från active_users itemList
+                            active_user.Items.Remove(selectedTrade.RequestedItem);
+
+                            //adds requested item to the the senders itemList
+                            selectedTrade.Sender.Items.Add(selectedTrade.RequestedItem);
+
+                            //adds offeredItem to active_users itemlist
+                            active_user.Items.Add(selectedTrade.OfferedItem);
+
+                            //removes the offered item from senders itemlist
+                            selectedTrade.Sender.Items.Remove(selectedTrade.OfferedItem);
+
                             selectedTrade.Status = TradeStatus.Accepted; //I change status to accepted.
 
 
