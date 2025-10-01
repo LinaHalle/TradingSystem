@@ -3,18 +3,18 @@ A user needs to be able to register an account Done!
 A user needs to be able to log out. Done!
 A user needs to be able to log in. Done!
 
-A user needs to be able to upload information about the item they wish to trade.
-A user needs to be able to browse a list of other users items.
-A user needs to be able to request a trade for other users items.
-A user needs to be able to browse trade requests.
-A user needs to be able to accept a trade request.
-A user needs to be able to deny a trade request.
-A user needs to be able to browse completed requests.*/
+A user needs to be able to upload information about the item they wish to trade. Done!
+A user needs to be able to browse a list of other users items. Done!
+A user needs to be able to request a trade for other users items. Done!
+A user needs to be able to browse trade requests. Done!
+A user needs to be able to accept a trade request. Done!
+A user needs to be able to deny a trade request. Done!
+A user needs to be able to browse completed requests. Done!*/
 
 //This is the code where the user interfare with program through the console.
 
 using App;
-//gör en lista med User som heter users
+//creating a list of User, named users
 List<User> users = new List<User>();
 
 //adderar Users så att jag kan kolla att min kod fungerar
@@ -321,7 +321,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
                         active_user = null;
                         break;
                     case "2":
-                        //this is just an extra break if the user changed it's mind about loggin out 
+                        //this is just an extra break if the user changed it's mind about login out 
                         break;
                 }
 
