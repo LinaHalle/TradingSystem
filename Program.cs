@@ -54,10 +54,12 @@ while (running) //The program runs inside a while loop until I explicitly decide
         Console.WriteLine("---------------------------------------");
 
         string registerOrLogin = Console.ReadLine();
-        //If active_user has an account and it checks out with TryLogin the active_user is not null anymore and moves out from the login menu and moves to the else where the rest of the code is  
+
         switch (registerOrLogin)
         {
             case "1":
+                //If active_user has an account and it checks out with TryLogin the active_user is not null anymore and moves out from the login menu and moves to the else where the rest of the code is  
+
                 try { Console.Clear(); } catch { } //workaround to allow debugging
                 Console.WriteLine("Enter username:");
                 string username = Console.ReadLine();
@@ -186,7 +188,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 }
                 int myItem = int.Parse(Console.ReadLine()) - 1; //convert the string input to an int myItem and take -1 to match the real index number that always starts on 0.
                 Item offeredItem = active_user.Items[myItem];  //OfferedItem gets its value  
-                                                               // User Sender = OfferedItem.Owner; //onödigt för sender är alltid active_user User Sender = active_user
+                // User Sender = OfferedItem.Owner; //unneccesary bc sender is always active_user 
 
                 Trade trade = new Trade(active_user, requestedItem, offeredItem, reciever, TradeStatus.Pending); //Creates a Trade object 
                 reciever.AddPendingTrade(trade); //The new trade is added to the recievers pendingtrade - list 
@@ -207,7 +209,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
                         Console.WriteLine($"{i}. {myTrades.Sender.Username} wants your {myTrades.RequestedItem.Name} in exchange for {myTrades.OfferedItem.Name}");  //displays the trades with an index
                         i++;
                     }
-                    int chosenTrade = int.Parse(Console.ReadLine()) - 1; //the active_user chooses a index and here it's converted from a string to an int and is reduced -1. 
+                    int chosenTrade = int.Parse(Console.ReadLine()) - 1; //the active_user chooses a index and here it's converted from a string to an int and is reduced with -1. 
                     Trade selectedTrade = active_user.pendingTrades[chosenTrade]; //I create a new variabel for the choosen trade
 
                     Console.WriteLine("Choose an option");
@@ -268,6 +270,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 }
                 else
                 {
+                    //if there's no pending trades (pendingtrades.count < 0), it jumps to the else
                     try { Console.Clear(); } catch { }
                     Console.WriteLine("You have no pending requests");
                     Console.WriteLine("Press ENTER to go back");
@@ -278,23 +281,27 @@ while (running) //The program runs inside a while loop until I explicitly decide
 
             case "5":
                 try { Console.Clear(); } catch { }
-                if (active_user.completedTrades.Count > 0)
+                if (active_user.completedTrades.Count > 0) //if list is empty or not
                 {
+                    //if not empty loop trough the trades in active_users completedtrades list
                     Console.WriteLine("Here's a list of your already completed trades");
                     foreach (Trade doneTrades in active_user.completedTrades)
                     {
+                        //if the trade sender was the active user, it displays one message in console
                         if (doneTrades.Sender == active_user)
                         {
                             Console.WriteLine($"You offered your {doneTrades.OfferedItem.Name} to {doneTrades.Reciever.Username} in exchange for {doneTrades.RequestedItem.Name}. Status: {doneTrades.Status}");
                         }
                         else
                         {
+                            //if the sender was not the active_user it displays another message in console.
                             Console.WriteLine($"{doneTrades.Sender.Username} offered your their {doneTrades.OfferedItem.Name} in exchange for your {doneTrades.RequestedItem.Name}. You {doneTrades.Status} this trade.");
                         }
                     }
                 }
                 else
                 {
+                    //list empty 
                     try { Console.Clear(); } catch { }
                     Console.WriteLine("You have no completed trades");
 
@@ -310,9 +317,11 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 switch (logout)
                 {
                     case "1":
+                        //to logout otu and go back to log-in menu, active_user= null again. 
                         active_user = null;
                         break;
                     case "2":
+                        //this is just an extra break if the user changed it's mind about loggin out 
                         break;
                 }
 
