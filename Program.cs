@@ -17,6 +17,15 @@ using App;
 //creating a list of User, named users
 List<User> users = new List<User>();
 
+//Loading user data
+string[] savedUsers = File.ReadAllLines("./saveUsers.txt");
+foreach (string user in savedUsers)
+{
+    string[] userToAdd = user.Split(':');
+    users.Add(new User(userToAdd[0], userToAdd[1]));
+}
+
+
 //adding some users to be able to see if my code compiles
 users.Add(new User("Lina", "tjokatt2000"));
 users.Add(new User("David", "tjokatt2000"));
@@ -100,7 +109,15 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 users.Add(new User(newUsername, newPassword)); //måste sparas sen när vi går igenom filer
                 try { Console.Clear(); } catch { }
                 Console.WriteLine("Account succesfully registerd, press ENTER to go back to log-in page");
+
+                string userToSave = newUsername + ":" + newPassword;
+                userToSave = userToSave + "\n";
+                Console.WriteLine(userToSave);
+                File.AppendAllText("./saveUsers.txt", userToSave);
+
                 Console.ReadLine();
+
+
 
                 break;
         }
@@ -238,7 +255,6 @@ while (running) //The program runs inside a while loop until I explicitly decide
                             selectedTrade.Sender.Items.Remove(selectedTrade.OfferedItem);
 
                             selectedTrade.Status = TradeStatus.Accepted; //I change status to accepted.
-
 
                             active_user.pendingTrades.Remove(selectedTrade); //I take the trade away from pending 
 
