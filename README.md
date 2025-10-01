@@ -15,10 +15,10 @@ A simple C# console application for trading items between users.
 
 Clone this repository and run it with .NET:
 
-bash
-git clone <repo-url>
-cd TradingSystem-main
-dotnet run
+- bash
+- git clone <repo-url>
+- cd TradingSystem-main
+- dotnet run
 
 ## Project Structure
 
@@ -32,8 +32,8 @@ dotnet run
 Welcome to TradeHub
 ------------- Log-in page -------------
 
-Do you already have an account, choose: 1. to login
-Do you want to create an account, choose: 2. to register
+- Do you already have an account, choose: 1. to login
+- Do you want to create an account, choose: 2. to register
 
 ---
 
