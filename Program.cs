@@ -17,7 +17,7 @@ using App;
 //creating a list of User, named users
 List<User> users = new List<User>();
 
-//adderar Users så att jag kan kolla att min kod fungerar
+//adding some users to be able to see if my code compiles
 users.Add(new User("Lina", "tjokatt2000"));
 users.Add(new User("David", "tjokatt2000"));
 
@@ -317,7 +317,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 switch (logout)
                 {
                     case "1":
-                        //to logout otu and go back to log-in menu, active_user= null again. 
+                        //to logout and go back to log-in menu, active_user= null again. 
                         active_user = null;
                         break;
                     case "2":

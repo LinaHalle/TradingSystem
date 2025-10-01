@@ -4,7 +4,7 @@ namespace App;
 class User
 {
     public string Username;
-    string _password;
+    string _password; //not public, private by default _ = a way of showing that it's private
     public List<Item> Items = new List<Item>();
 
     public List<Trade> pendingTrades = new List<Trade>();
