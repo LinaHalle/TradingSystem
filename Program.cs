@@ -13,9 +13,12 @@ A user needs to be able to browse completed requests. Done!*/
 
 //This is the code where the user interfare with program through the console.
 
+using System.Buffers;
+using System.ComponentModel;
 using App;
 //creating a list of User, named users
 List<User> users = new List<User>();
+
 
 //Loading user data
 string[] savedUsers = File.ReadAllLines("./saveUsers.txt");
@@ -25,23 +28,55 @@ foreach (string user in savedUsers)
     users.Add(new User(userToAdd[0], userToAdd[1]));
 }
 
+//Loading item data
+if (File.Exists("./savedItems.txt"))
+{
+    string[] savedItems = File.ReadAllLines("./savedItems.txt");
 
-//adding some users to be able to see if my code compiles
-users.Add(new User("Lina", "tjokatt2000"));
-users.Add(new User("David", "tjokatt2000"));
+    foreach (string item in savedItems)
+    {
+        if (item != "") //skip empty lines
+        {
+            string[] itemToAdd = item.Split(':');
+            string itemName = itemToAdd[0];
+            string description = itemToAdd[1];
+            string ownerName = itemToAdd[2];
+
+            User owner = null;
+            foreach (User u in users)
+            {
+                if (u.Username == ownerName)
+                {
+                    owner = u;
+                    break;
+                }
+            }
+            if (owner != null)
+            {
+                owner.AddItem(itemName, description, owner);
+            }
+        }
+    }
+}
+
+
+//adding some users to be able to see if my code compiles, out commented them
+// users.Add(new User("Lina", "tjokatt2000"));
+// users.Add(new User("David", "tjokatt2000"));
 
 //I assign the users to a name just to make it easier to call methods on them without writing users[0]/ users[1] everytime, but its not needed for the code to compile.
-User lina = users[0];
-User david = users[1];
+// User lina = users[0];
+// User david = users[1];
 
 //I add som items to the users
-lina.AddItem("Airpods PRO", "Helt nya", lina);
-lina.AddItem("Monstrea", "50 cm", lina);
-lina.AddItem("Läsglasögon", "Måttligt använda", lina);
+//took away to see if file saving works
+// lina.AddItem("Airpods PRO", "Helt nya", lina);
+// lina.AddItem("Monstrea", "50 cm", lina);
+// lina.AddItem("Läsglasögon", "Måttligt använda", lina);
 
-david.AddItem("Nike keps", "Grön och skön", david);
-david.AddItem("Lenovo dator", "Årsmodell 2018", david);
-david.AddItem("En ryggsäck", "Väldigt rymlig", david);
+// david.AddItem("Nike keps", "Grön och skön", david);
+// david.AddItem("Lenovo dator", "Årsmodell 2018", david);
+// david.AddItem("En ryggsäck", "Väldigt rymlig", david);
 
 
 
@@ -54,6 +89,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
     if (active_user == null) //when no one is logged in the user sees the login/register menu
     {
         try { Console.Clear(); } catch { }
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
         Console.WriteLine("Welcome to TradeHub");
         Console.WriteLine("------------- Log-in page -------------");
         Console.WriteLine();
@@ -61,6 +97,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
         Console.WriteLine("Do you want to create an account, choose: 2. to register");
         Console.WriteLine();
         Console.WriteLine("---------------------------------------");
+        Console.ResetColor();
 
         string registerOrLogin = Console.ReadLine();
 
@@ -106,18 +143,18 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 Console.WriteLine("Enter your new password");
                 string newPassword = Console.ReadLine();
 
-                users.Add(new User(newUsername, newPassword)); //måste sparas sen när vi går igenom filer
+                users.Add(new User(newUsername, newPassword));
                 try { Console.Clear(); } catch { }
                 Console.WriteLine("Account succesfully registerd, press ENTER to go back to log-in page");
 
+                //here I create a file that saves the new user in the File saveUsers.txt. 
+                // ./ = put the file in the same repository as program.cs
+                //it is a text file so save it as txt. 
                 string userToSave = newUsername + ":" + newPassword;
-                userToSave = userToSave + "\n";
-                Console.WriteLine(userToSave);
-                File.AppendAllText("./saveUsers.txt", userToSave);
+                userToSave = userToSave + "\n"; //add a new line 
+                File.AppendAllText("./saveUsers.txt", userToSave); //path + content
 
                 Console.ReadLine();
-
-
 
                 break;
         }
@@ -146,8 +183,14 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 string description = Console.ReadLine();
                 User owner = active_user;
                 active_user.AddItem(name, description, owner);
-                Console.WriteLine("The item was succesfylly added to your list"); //behöver kunna sparas när vi lärt oss filsystem
+                Console.WriteLine("The item was succesfylly added to your list");
                 Console.WriteLine("Press ENTER to go back to menu");
+
+                //I create a new txt.file that saves items
+                string itemToSave = name + ":" + description + ":" + active_user.Username;
+                itemToSave = itemToSave + "\n";
+                File.AppendAllText("./savedItems.txt", itemToSave); //path + content
+
                 Console.ReadLine();
                 break;
 
