@@ -29,15 +29,16 @@ foreach (string user in savedUsers)
 }
 
 //Loading item data
-if (File.Exists("./savedItems.txt"))
+if (File.Exists("./savedItems.txt")) //just to make sure the file exists and if it doesn't the program wont crash
 {
-    string[] savedItems = File.ReadAllLines("./savedItems.txt");
+    string[] savedItems = File.ReadAllLines("./savedItems.txt"); //turn the strings to stringarrays
 
     foreach (string item in savedItems)
     {
         if (item != "") //skip empty lines
         {
-            string[] itemToAdd = item.Split(':');
+            string[] itemToAdd = item.Split(':'); //foreach string array split at : 
+            //give the strings at[i] a variable name
             string itemName = itemToAdd[0];
             string description = itemToAdd[1];
             string ownerName = itemToAdd[2];
@@ -45,38 +46,120 @@ if (File.Exists("./savedItems.txt"))
             User owner = null;
             foreach (User u in users)
             {
-                if (u.Username == ownerName)
+                if (u.Username == ownerName) //if the user in users match with ownername
                 {
-                    owner = u;
+                    owner = u; //when found the right user
                     break;
                 }
             }
             if (owner != null)
             {
-                owner.AddItem(itemName, description, owner);
+                owner.AddItem(itemName, description, owner); //add the item to the right user/owner
             }
         }
     }
 }
 
+//loading trade data from file savedTrades
+if (File.Exists("./savedTrades.txt"))
+{
+    string[] savedTrades = File.ReadAllLines("./savedTrades.txt");
+    foreach (string trade in savedTrades)
+    {
+        if (trade != "")
+        {
+            string[] tradeToAdd = trade.Split(':');
+            string tradeSenderName = tradeToAdd[0];
+            string tradeRequestedItemName = tradeToAdd[1];
+            string tradeOfferedItemName = tradeToAdd[2];
+            string tradeRecieverName = tradeToAdd[3];
+            string tradeStatusStr = tradeToAdd[4];
 
-//adding some users to be able to see if my code compiles, out commented them
-// users.Add(new User("Lina", "tjokatt2000"));
-// users.Add(new User("David", "tjokatt2000"));
+            //Find sender in users list
+            User sender = null;
+            foreach (User user in users)
+            {
+                if (user.Username == tradeSenderName)
+                {
+                    sender = user;
+                    break;
+                }
+            }
 
-//I assign the users to a name just to make it easier to call methods on them without writing users[0]/ users[1] everytime, but its not needed for the code to compile.
-// User lina = users[0];
-// User david = users[1];
+            //find reciever in users list
+            User reciever = null;
 
-//I add som items to the users
-//took away to see if file saving works
-// lina.AddItem("Airpods PRO", "Helt nya", lina);
-// lina.AddItem("Monstrea", "50 cm", lina);
-// lina.AddItem("Läsglasögon", "Måttligt använda", lina);
+            foreach (User user in users)
+            {
+                if (user.Username == tradeRecieverName)
+                {
+                    reciever = user;
+                    break;
+                }
+            }
 
-// david.AddItem("Nike keps", "Grön och skön", david);
-// david.AddItem("Lenovo dator", "Årsmodell 2018", david);
-// david.AddItem("En ryggsäck", "Väldigt rymlig", david);
+            //find requested item in receivers item list
+            Item requestedItem = null;
+            if (reciever != null)
+            {
+
+                foreach (Item item in reciever.Items)
+                {
+                    if (item.Name == tradeRequestedItemName)
+                    {
+                        requestedItem = item;
+                        break;
+                    }
+                }
+            }
+
+            //find offered item in senders item list
+            Item offeredItem = null;
+            if (sender != null)
+            {
+                foreach (Item item in sender.Items)
+                {
+                    if (item.Name == tradeOfferedItemName)
+                    {
+                        offeredItem = item;
+                        break;
+                    }
+                }
+            }
+
+
+            if (sender != null && reciever != null && requestedItem != null && offeredItem != null)
+            {
+                TradeStatus status = TradeStatus.Pending;
+                if (tradeStatusStr == "Pending")
+                {
+                    status = TradeStatus.Pending;
+                }
+                else if (tradeStatusStr == "Accepted")
+                {
+                    status = TradeStatus.Accepted;
+                }
+                else if (tradeStatusStr == "Denied")
+                {
+                    status = TradeStatus.Denied;
+                }
+
+                Trade tradeObjekt = new Trade(sender, requestedItem, offeredItem, reciever, status);
+
+                if (status == TradeStatus.Pending)
+                {
+                    reciever.AddPendingTrade(tradeObjekt);
+                }
+                else
+                {
+                    sender.completedTrades.Add(tradeObjekt);
+                    reciever.completedTrades.Add(tradeObjekt);
+
+                }
+            }
+        }
+    }
+}
 
 
 
@@ -254,6 +337,13 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 reciever.AddPendingTrade(trade); //The new trade is added to the recievers pendingtrade - list 
 
                 Console.WriteLine($"Your trade request has succesfully been sent to: {reciever.Username}");
+
+                //save new trade in a savedTrades file
+                //can only save strings not objects
+                string tradeToSave = active_user.Username + ":" + requestedItem.Name + ":" + offeredItem.Name + ":" + reciever.Username + ":" + TradeStatus.Pending;
+                tradeToSave = tradeToSave + "\n";
+                File.AppendAllText("./savedTrades.txt", tradeToSave);
+
                 Console.WriteLine("Press ENTER to go back to main menu");
                 Console.ReadLine();
                 break;
