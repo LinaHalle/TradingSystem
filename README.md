@@ -1,7 +1,8 @@
 # TradingSystem
 
 A simple C# console application for trading items between users.
-In the main branch I only save users, items and trades in the local memory in the console
+In the main branch I only save users, items and trades in the local memory in the console.
+
 In the persistentdata branch I created a version that saves the data to files
 
 ## Features
