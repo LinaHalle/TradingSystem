@@ -1,24 +1,11 @@
-﻿/* 
-A user needs to be able to register an account Done!
-A user needs to be able to log out. Done!
-A user needs to be able to log in. Done!
+﻿//This is the code where the user interfare with program through the console.
 
-A user needs to be able to upload information about the item they wish to trade. Done!
-A user needs to be able to browse a list of other users items. Done!
-A user needs to be able to request a trade for other users items. Done!
-A user needs to be able to browse trade requests. Done!
-A user needs to be able to accept a trade request. Done!
-A user needs to be able to deny a trade request. Done!
-A user needs to be able to browse completed requests. Done!*/
-
-//This is the code where the user interfare with program through the console.
-
-using System.Buffers;
-using System.ComponentModel;
 using App;
-//creating a list of User, named users
+
+//creating a list of Users, named users
 List<User> users = new List<User>();
 
+// For the file-saving feature to work properly, the program must load the saved data at startup
 
 //Loading user data
 string[] savedUsers = File.ReadAllLines("./saveUsers.txt");
@@ -38,6 +25,7 @@ if (File.Exists("./savedItems.txt")) //just to make sure the file exists and if 
         if (item != "") //skip empty lines
         {
             string[] itemToAdd = item.Split(':'); //foreach string array split at : 
+
             //give the strings at[i] a variable name
             string itemName = itemToAdd[0];
             string description = itemToAdd[1];
@@ -161,9 +149,6 @@ if (File.Exists("./savedTrades.txt"))
     }
 }
 
-
-
-
 User? active_user = null; //? = nullable, there can be an logged in user or a not logged in user. With this I keep track of the currently logged-in user.
 
 bool running = true;
@@ -199,7 +184,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
 
                 try { Console.Clear(); } catch { }
 
-                //I use a foreach loop to go through the saved users and see if anything match the inputs, if it get a match the loop breaks and move on otherwise goes back to login
+                //I use a foreach loop to go through the saved users and see if anything match the inputs, if it get a match the loop breaks and move on to main menu
                 foreach (User user in users)
                 {
                     if (user.TryLogin(username, password))
@@ -207,12 +192,12 @@ while (running) //The program runs inside a while loop until I explicitly decide
                         active_user = user;
                         break;
                     }
-                    // else
-                    // {
-                    //     Console.WriteLine("No matching user, try again or create an account, press ENTER to go back");
-                    //     Console.ReadLine();
-                    //     break;
-                    // }
+                }
+                // if no match 
+                if (active_user == null)
+                {
+                    Console.WriteLine("No matching user, try again or create an account, press ENTER to go back");
+                    Console.ReadLine();
                 }
                 break;
 
@@ -475,9 +460,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 }
 
                 break;
-
         }
     }
-
 }
 

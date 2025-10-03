@@ -1,6 +1,6 @@
 namespace App;
 
-/* The user class represents a user in the system. Each user has a Username, a private _password, and lists for their Items, pendingTrades and completedTrades. */
+/* The user class represents an user in the system. Each user has an Username, a private _password, and lists for their Items, pendingTrades and completedTrades. */
 class User
 {
     public string Username;
@@ -44,6 +44,4 @@ class User
     {
         completedTrades.Add(trade);
     }
-
-
 }

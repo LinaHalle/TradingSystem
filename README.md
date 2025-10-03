@@ -1,6 +1,7 @@
 # TradingSystem
 
 A simple C# console application for trading items between users.
+The persistentData branch implements file-based saving and loading, so all users, items, and trades are written to text files. This makes the data persist between program runs, unlike the main branch where everything is stored locally in memory only
 
 ## Features
 
@@ -17,7 +18,7 @@ Clone this repository and run it with .NET:
 
 - bash
 - git clone <repo-url>
-- cd TradingSystem-main
+- cd TradingSystem-persistentData
 - dotnet run
 
 ## Project Structure
@@ -26,6 +27,9 @@ Clone this repository and run it with .NET:
 - User.cs - represents a user with items and trades
 - Item.cs - represents an item with name, description and owner
 - Trade.cs - represents a trade request between two users
+- saveUsers.txt
+- saveditems.txt
+- savedTrades.txt
 
 ## Example run
 
@@ -48,7 +52,7 @@ TradeHub main menu, choose any of the options
 
 ## Future improvements
 
-- Save users, items and trades to files or a database (currently only in memory)
+- Create more functions/methods in order to prevent writing code more than once
 - Improve error handling and inout validation
 - Add unique trade Ids for better tracking
 - Support updating or removing items
