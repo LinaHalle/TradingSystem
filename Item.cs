@@ -1,6 +1,6 @@
 namespace App;
 
-/* The item class represents an object that belongs to a user. An item can not exist without an user. The class has three fields, Name, Descprition and Owner (which links the item to a User) */
+/* The item class represents an object that belongs to an user. An item can not exist without an user. The class has three fields, Name, Descprition and Owner (which links the item to an User) */
 
 class Item
 {

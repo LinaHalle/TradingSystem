@@ -1,23 +1,10 @@
-﻿/* 
-A user needs to be able to register an account Done!
-A user needs to be able to log out. Done!
-A user needs to be able to log in. Done!
-
-A user needs to be able to upload information about the item they wish to trade. Done!
-A user needs to be able to browse a list of other users items. Done!
-A user needs to be able to request a trade for other users items. Done!
-A user needs to be able to browse trade requests. Done!
-A user needs to be able to accept a trade request. Done!
-A user needs to be able to deny a trade request. Done!
-A user needs to be able to browse completed requests. Done!*/
-
-//This is the code where the user interfare with program through the console.
+﻿//This is the code where the user interfare with the program through the console.
 
 using App;
-//creating a list of User, named users
+//creating an empty list of Users, named users
 List<User> users = new List<User>();
 
-//adding some users to be able to see if my code compiles
+//adding users to be able to see if my code compiles
 users.Add(new User("Lina", "tjokatt2000"));
 users.Add(new User("David", "tjokatt2000"));
 
@@ -25,7 +12,7 @@ users.Add(new User("David", "tjokatt2000"));
 User lina = users[0];
 User david = users[1];
 
-//I add som items to the users
+//// I hardcode a few items for testing purposes, so I can verify that the trading system works without having to create items manually each time
 lina.AddItem("Airpods PRO", "Helt nya", lina);
 lina.AddItem("Monstrea", "50 cm", lina);
 lina.AddItem("Läsglasögon", "Måttligt använda", lina);
@@ -33,8 +20,6 @@ lina.AddItem("Läsglasögon", "Måttligt använda", lina);
 david.AddItem("Nike keps", "Grön och skön", david);
 david.AddItem("Lenovo dator", "Årsmodell 2018", david);
 david.AddItem("En ryggsäck", "Väldigt rymlig", david);
-
-
 
 
 User? active_user = null; //? = nullable, there can be an logged in user or a not logged in user. With this I keep track of the currently logged-in user.
@@ -70,7 +55,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
 
                 try { Console.Clear(); } catch { }
 
-                //I use a foreach loop to go through the saved users and see if anything match the inputs, if it get a match the loop breaks and move on otherwise goes back to login
+                //I use a foreach loop to go through the saved users and see if anything match the inputs, if it get a match the loop breaks and moves on to main menu
                 foreach (User user in users)
                 {
                     if (user.TryLogin(username, password))
@@ -78,17 +63,17 @@ while (running) //The program runs inside a while loop until I explicitly decide
                         active_user = user;
                         break;
                     }
-                    // else
-                    // {
-                    //     Console.WriteLine("No matching user, try again or create an account, press ENTER to go back");
-                    //     Console.ReadLine();
-                    //     break;
-                    // }
+                }
+                //if the user isn't found
+                if (active_user == null)
+                {
+                    Console.WriteLine("No matching user, try again or create an account, press ENTER to go back");
+                    Console.ReadLine();
                 }
                 break;
 
             case "2":
-                //here the new user is created and then relocated to the log in menu again bc active_user is still null.
+                //here the new user is created and then relocated to the log in menu again because active_user is still null.
                 try { Console.Clear(); } catch { }
                 Console.WriteLine("Enter your new username");
                 string newUsername = Console.ReadLine();
@@ -97,11 +82,10 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 Console.WriteLine("Enter your new password");
                 string newPassword = Console.ReadLine();
 
-                users.Add(new User(newUsername, newPassword)); //måste sparas sen när vi går igenom filer
+                users.Add(new User(newUsername, newPassword)); //the user is saved in the users list so after redirection to login page the user will be able to login
                 try { Console.Clear(); } catch { }
                 Console.WriteLine("Account succesfully registerd, press ENTER to go back to log-in page");
                 Console.ReadLine();
-
                 break;
         }
     }
@@ -129,7 +113,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 string description = Console.ReadLine();
                 User owner = active_user;
                 active_user.AddItem(name, description, owner);
-                Console.WriteLine("The item was succesfylly added to your list"); //behöver kunna sparas när vi lärt oss filsystem
+                Console.WriteLine("The item was succesfylly added to your list");
                 Console.WriteLine("Press ENTER to go back to menu");
                 Console.ReadLine();
                 break;
@@ -176,7 +160,9 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 }
 
                 int chosenIndex = int.Parse(Console.ReadLine()) - 1;  //convert the string input to an int chosenIndex and take -1 to match the real index number that always starts on 0.
+
                 Item requestedItem = OtherUsersItems[chosenIndex];  //Here I give requestedItem the value of the choosen item.
+
                 User reciever = requestedItem.Owner; // I connect the Reciever field to the owner of the requested item.
 
                 Console.WriteLine("Enter the number of your item you want to offer as trade");
@@ -187,10 +173,12 @@ while (running) //The program runs inside a while loop until I explicitly decide
                     i++;
                 }
                 int myItem = int.Parse(Console.ReadLine()) - 1; //convert the string input to an int myItem and take -1 to match the real index number that always starts on 0.
+
                 Item offeredItem = active_user.Items[myItem];  //OfferedItem gets its value  
                 // User Sender = OfferedItem.Owner; //unneccesary bc sender is always active_user 
 
                 Trade trade = new Trade(active_user, requestedItem, offeredItem, reciever, TradeStatus.Pending); //Creates a Trade object 
+
                 reciever.AddPendingTrade(trade); //The new trade is added to the recievers pendingtrade - list 
 
                 Console.WriteLine($"Your trade request has succesfully been sent to: {reciever.Username}");
@@ -202,6 +190,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
                 try { Console.Clear(); } catch { }
                 Console.WriteLine("Choose the Trade you want to Accept/Deny");
                 i = 1; //want the list to start at 1
+
                 if (active_user.pendingTrades.Count > 0)//If the list isn't empty
                 {
                     foreach (Trade myTrades in active_user.pendingTrades) //loops though the active_users pending trades
@@ -210,6 +199,7 @@ while (running) //The program runs inside a while loop until I explicitly decide
                         i++;
                     }
                     int chosenTrade = int.Parse(Console.ReadLine()) - 1; //the active_user chooses a index and here it's converted from a string to an int and is reduced with -1. 
+
                     Trade selectedTrade = active_user.pendingTrades[chosenTrade]; //I create a new variabel for the choosen trade
 
                     Console.WriteLine("Choose an option");

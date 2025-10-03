@@ -1,6 +1,8 @@
 # TradingSystem
 
 A simple C# console application for trading items between users.
+In the main branch I only save users, items and trades in the local memory in the console
+In the persistentdata branch I created a version that saves the data to files
 
 ## Features
 
@@ -48,8 +50,8 @@ TradeHub main menu, choose any of the options
 
 ## Future improvements
 
-- Save users, items and trades to files or a database (currently only in memory)
-- Improve error handling and inout validation
+- Create more methods/functions to avoid re-writing code more than once
+- Improve error handling and input validation
 - Add unique trade Ids for better tracking
 - Support updating or removing items
 
